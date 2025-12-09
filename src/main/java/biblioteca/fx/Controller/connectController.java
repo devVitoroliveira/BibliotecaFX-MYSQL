@@ -1,10 +1,12 @@
-package biblioteca.fx;
+package biblioteca.fx.Controller;
 
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import biblioteca.fx.App;
 import biblioteca.fx.DAO.ConexaoDAO;
 import biblioteca.fx.DAO.userDAO;
 import biblioteca.fx.DTO.userDTO;
@@ -33,7 +35,7 @@ public class connectController {
     }
 
     @FXML
-    private void login() {
+    private void login() throws IOException {
         try {
 
             String name, pass;
@@ -54,6 +56,7 @@ public class connectController {
                 alert.setHeaderText("Login Successful");
                 alert.setContentText("Welcome, " + name + "!");
                 alert.showAndWait();
+                App.setRoot("main");
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Login Failed");

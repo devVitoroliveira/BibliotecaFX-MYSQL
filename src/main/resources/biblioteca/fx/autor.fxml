@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="608.0" prefWidth="897.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="biblioteca.fx.Controller.autorController">
+
+   <children>
+      <Button fx:id="salvarButton" layoutX="25.0" layoutY="553.0" mnemonicParsing="false" onAction="#salvarButton" text="Salvar" />
+
+            <Button fx:id="cancelarButton" layoutX="132.0" layoutY="553.0" mnemonicParsing="false" onAction="#cancelarButton" text="Cancelar" />
+
+      <Label layoutX="16.0" layoutY="47.0" text="Nome" />
+      <Label layoutX="270.0" layoutY="47.0" text="Nacionalidade" />
+
+      <TextField fx:id="nomeAutorField" layoutX="14.0" layoutY="76.0" />
+
+      <TextField fx:id="nacionalidadeField" layoutX="271.0" layoutY="76.0" />
+
+      <Label layoutX="20.0" layoutY="181.0" text="Data Inicio" />
+      <Label layoutX="270.0" layoutY="181.0" text="Data Fim" />
+
+      <TextField fx:id="periodoVidaField" layoutX="14.0" layoutY="206.0" />
+
+      <TextField fx:id="periodoFimField" layoutX="270.0" layoutY="206.0" />
+      <TableView fx:id="autorTableView" layoutX="431.0" layoutY="14.0" prefHeight="200.0" prefWidth="444.0">
+    <columns>
+        <TableColumn fx:id="autorId" prefWidth="75.0" text="Id" />
+        <TableColumn fx:id="autorNome" prefWidth="75.0" text="Nome" />
+        <TableColumn fx:id="autorNacionalidade" prefWidth="101.0" text="Nacionalidade" />
+        <TableColumn fx:id="autorPeriodoVida" prefWidth="92.0" text="Data Inicio" />
+        <TableColumn fx:id="autorPeriodoFim" prefWidth="100.0" text="Data Fim" />
+    </columns>
+</TableView>
+      <Button layoutX="-224.0" layoutY="14.0" mnemonicParsing="false" text="Button" />
+      <Button fx:id="listButton" layoutX="245.0" layoutY="553.0" mnemonicParsing="false" onAction="#listButton" text="Listar" />
+      <Button fx:id="updateButton" layoutX="344.0" layoutY="553.0" mnemonicParsing="false" onAction="#updateButton" text="Alterar" />
+      <Button fx:id="backButton" layoutX="449.0" layoutY="553.0" mnemonicParsing="false" onAction="#backButton" text="Voltar" />
+   </children>
+</Pane>
