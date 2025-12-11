@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="biblioteca.fx.Controller.funcionarioController">
+   <children>
+      <ComboBox fx:id="cargoComboBox" layoutX="16.0" layoutY="269.0" prefWidth="150.0" promptText="Selecione" />
+      <Button fx:id="salvarButton" layoutX="14.0" layoutY="336.0" mnemonicParsing="false" onAction="#salvarButton" text="Salvar" />
+      <Button fx:id="listarButton" layoutX="91.0" layoutY="336.0" mnemonicParsing="false" onAction="#listarButton" text="Listar" />
+      <Button fx:id="atualizarButton" layoutX="177.0" layoutY="336.0" mnemonicParsing="false" onAction="#atualizarButton" text="Atualizar" />
+      <Button fx:id="deleteButton" layoutX="274.0" layoutY="336.0" mnemonicParsing="false" onAction="#excluirButton" text="Deletar" />
+      <Button fx:id="cancelarButton" layoutX="370.0" layoutY="336.0" mnemonicParsing="false" onAction="#cancelarButton" text="Cancelar" />
+      <Button fx:id="voltarButton" layoutX="444.0" layoutY="336.0" mnemonicParsing="false" onAction="#voltarButton" text="Voltar" />
+      <TableView fx:id="funcionarioTableView" layoutX="387.0" layoutY="15.0" prefHeight="200.0" prefWidth="443.0">
+        <columns>
+          <TableColumn fx:id="funcionarioId" prefWidth="75.0" text="Id" />
+          <TableColumn fx:id="funcionarioNome" prefWidth="75.0" text="Nome" />
+            <TableColumn fx:id="funcionarioCargo" prefWidth="75.0" text="Cargo" />
+            <TableColumn fx:id="funcionarioSalario" prefWidth="75.0" text="Salario" />
+            <TableColumn fx:id="funcionarioEmail" prefWidth="75.0" text="Salario" />
+            <TableColumn fx:id="funcionarioTelefone" prefWidth="75.0" text="Salario" />
+        </columns>
+      </TableView>
+      <Label layoutX="24.0" layoutY="227.0" text="Cargo" />
+      <Label layoutX="33.0" layoutY="36.0" text="Nome" />
+      <Label layoutX="22.0" layoutY="106.0" text="Salario" />
+      <TextField fx:id="nomeFuncionarioField" layoutX="17.0" layoutY="70.0" />
+      <TextField fx:id="salarioField" layoutX="17.0" layoutY="138.0" />
+      <Label layoutX="216.0" layoutY="36.0" text="Telefone" />
+      <Label layoutX="239.0" layoutY="115.0" text="Email" />
+      <TextField fx:id="telefoneField" layoutX="200.0" layoutY="70.0" />
+      <TextField fx:id="emailField" layoutX="200.0" layoutY="144.0" />
+   </children>
+</Pane>

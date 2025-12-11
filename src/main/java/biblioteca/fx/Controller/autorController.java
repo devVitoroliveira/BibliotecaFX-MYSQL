@@ -47,6 +47,9 @@ public class autorController {
     private Button backButton;
 
     @FXML
+    private Button deleteButton;
+
+    @FXML
     private TableView<autorDTO> autorTableView;
 
     @FXML
@@ -96,10 +99,8 @@ public class autorController {
             periodoFim = periodoFimField.getText();
 
             if (!nome.isEmpty() && !nacionalidade.isEmpty() && !periodoVida.isEmpty()) {
-                String fim = null;
-                if (!periodoFim.trim().isEmpty()) {
-                    fim = periodoFim.trim();
-                }
+                String fim = periodoFim.trim().isEmpty() ? null : periodoFim.trim();
+
                 autorDTO autor = new autorDTO();
                 autor.setNome(nome);
                 autor.setNacionalidade(nacionalidade);
@@ -118,6 +119,13 @@ public class autorController {
                 nomeAutorField.clear();
                 periodoVidaField.clear();
                 periodoFimField.clear();
+                listButton();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Warning");
+                alert.setHeaderText("Incomplete Data");
+                alert.setContentText("Please fill in all required fields.");
+                alert.showAndWait();
             }
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -192,11 +200,46 @@ public class autorController {
     }
 
     @FXML
+    private void deleteButton() {
+        int selectedIndex = autorTableView.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            autorDTO autor = autorTableView.getSelectionModel().getSelectedItem();
+            try {
+                autorDAO autorDAO = new autorDAO();
+                autorDAO.deleteAutor(autor);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Success");
+                alert.setHeaderText("Author Deleted");
+                alert.setContentText("The author was deleted successfully.");
+                alert.showAndWait();
+                nacionalidadeField.clear();
+                nomeAutorField.clear();
+                periodoVidaField.clear();
+                periodoFimField.clear();
+                listButton();
+            } catch (SQLException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Error Deleting Author");
+                alert.setContentText("There was an error deleting the author: " + e.getMessage());
+                alert.showAndWait();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Author Selected");
+            alert.setContentText("Please select an author in the table.");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
     private void cancelarButton() {
         nomeAutorField.clear();
         nacionalidadeField.clear();
         periodoVidaField.clear();
         periodoFimField.clear();
+        autorTableView.getSelectionModel().clearSelection();
     }
 
     @FXML

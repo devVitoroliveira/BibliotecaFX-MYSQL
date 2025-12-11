@@ -40,5 +40,6 @@
       <Button fx:id="listButton" layoutX="245.0" layoutY="553.0" mnemonicParsing="false" onAction="#listButton" text="Listar" />
       <Button fx:id="updateButton" layoutX="344.0" layoutY="553.0" mnemonicParsing="false" onAction="#updateButton" text="Alterar" />
       <Button fx:id="backButton" layoutX="449.0" layoutY="553.0" mnemonicParsing="false" onAction="#backButton" text="Voltar" />
+      <Button fx:id="deleteButton" layoutX="537.0" layoutY="553.0" mnemonicParsing="false" onAction="#deleteButton" text="Deletar" />
    </children>
 </Pane>

@@ -4,10 +4,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.Pane?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="biblioteca.fx.Controller.mainController">
    <children>
       <Button fx:id="autor" layoutX="20.0" layoutY="222.0" mnemonicParsing="false" onAction="#abrirTelaAutor" text="Gerenciar Autor" />
       <Label layoutX="223.0" layoutY="50.0" text="Menu Principal" />
+      <Button fx:id="cliente" layoutX="177.0" layoutY="222.0" mnemonicParsing="false" onAction="#abrirTelaCliente" text="Gerenciar Cliente" />
+      <Button fx:id="func" layoutX="330.0" layoutY="222.0" mnemonicParsing="false" onAction="#abrirTelaFuncionario" text="Gerenciar Funcionário" />
    </children>
 </Pane>

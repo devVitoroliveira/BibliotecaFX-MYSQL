@@ -38,11 +38,7 @@ public class autorDAO {
             rs = pstm.getGeneratedKeys();
             pstm.close();
         } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText("Erro ao adicionar autor");
-            alert.setContentText("Erro ao adicionar autor: " + e.getMessage());
-            alert.showAndWait();
+            throw e;
         }
     }
 
@@ -75,16 +71,17 @@ public class autorDAO {
 
     @FXML
     public void updateAutor(autorDTO autor) throws SQLException {
-        String sql = "UPDATE autor SET nacionalidade = ?, dataInicio = ?, dataFim = ? WHERE idautor = ?";
+        String sql = "UPDATE autor a JOIN pessoa p ON p.idPessoa = a.idautor SET p.nomePessoa = ?, a.nacionalidade = ?, a.dataInicio = ?, a.dataFim = ? WHERE a.idautor = ?";
         try {
             conn = new ConexaoDAO().conexaoBD();
             pstm = conn.prepareStatement(sql);
-            pstm.setString(1, autor.getNacionalidade());
-            pstm.setString(2, autor.getPeriodoVida());
-            pstm.setString(3, autor.getPeriodoFim());
-            pstm.setInt(4, autor.getId_pessoa());
+            pstm.setString(1, autor.getNome());
+            pstm.setString(2, autor.getNacionalidade());
+            pstm.setString(3, autor.getPeriodoVida());
+            pstm.setString(4, autor.getPeriodoFim());
+            pstm.setInt(5, autor.getId_pessoa());
 
-            pstm.execute();
+            pstm.executeUpdate();
             pstm.close();
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -92,6 +89,20 @@ public class autorDAO {
             alert.setHeaderText("Erro ao atualizar autor");
             alert.setContentText("Erro ao atualizar autor: " + e.getMessage());
             alert.showAndWait();
+        }
+    }
+
+    @FXML
+    public void deleteAutor(autorDTO autor) throws SQLException {
+        String sql = "delete from autor where idautor = ?";
+        try {
+            conn = new ConexaoDAO().conexaoBD();
+            pstm = conn.prepareStatement(sql);
+            pstm.setInt(1, autor.getId_pessoa());
+            pstm.execute();
+            pstm.close();
+        } catch (SQLException e) {
+            throw e;
         }
     }
 }
