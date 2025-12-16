@@ -9,9 +9,9 @@ import java.util.Vector;
 import biblioteca.fx.App;
 import biblioteca.fx.DAO.funcionarioDAO;
 import biblioteca.fx.DTO.funcionarioDTO;
+import biblioteca.fx.util.AlertUtils;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
@@ -107,11 +107,7 @@ public class funcionarioController {
                 cargoComboBox.getItems().add(rs.getString(2));
             }
         } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText("Erro ao carregar box");
-            alert.setContentText("Erro ao carregar box: " + e.getMessage());
-            alert.showAndWait();
+            AlertUtils.erro("Erro", "Erro ao carregar box", "Erro ao carregar box: " + e.getMessage()).showAndWait();
         }
     }
 
@@ -132,45 +128,30 @@ public class funcionarioController {
             funcionario.setEmail(email);
             funcionario.setSalario(salario);
             if (cargoIndex < 0) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Aviso");
-                alert.setHeaderText("Campos em branco");
-                alert.setContentText("Por favor, selecione um cargo.");
-                alert.showAndWait();
+                AlertUtils.aviso("Aviso", "Campos em branco", "Por favor, selecione um cargo.").showAndWait();
                 return;
             }
 
-            // atribui id do cargo a partir do vector Id
             funcionario.setId_cargo(Id.get(cargoIndex));
 
             if (!nome.isEmpty() && !telefone.isEmpty() && !email.isEmpty()) {
                 funcionarioDAO funcionarioDAO = new funcionarioDAO();
                 funcionarioDAO.addFuncionario(funcionario);
 
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Sucesso");
-                alert.setHeaderText("Funcionário adicionado");
-                alert.setContentText("Funcionário adicionado com sucesso!");
-                alert.showAndWait();
+                AlertUtils.info("Sucesso", "Funcionário adicionado", "Funcionário adicionado com sucesso!")
+                        .showAndWait();
                 nomeFuncionarioField.clear();
                 telefoneField.clear();
                 emailField.clear();
                 salarioField.clear();
                 listarButton.fire();
             } else {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Aviso");
-                alert.setHeaderText("Campos em branco");
-                alert.setContentText("Por favor, preencha todos os campos.");
-                alert.showAndWait();
+                AlertUtils.aviso("Aviso", "Campos em branco", "Por favor, preencha todos os campos.").showAndWait();
             }
 
         } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText("Erro ao adicionar funcionário");
-            alert.setContentText("Erro ao adicionar funcionário: " + e.getMessage());
-            alert.showAndWait();
+            AlertUtils.erro("Erro", "Erro ao adicionar funcionário", "Erro ao adicionar funcionário: " + e.getMessage())
+                    .showAndWait();
         }
     }
 
@@ -183,11 +164,8 @@ public class funcionarioController {
                     .observableArrayList(funcionarios);
             funcionarioTableView.setItems(funcionariolist);
         } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText("Erro ao listar funcionários");
-            alert.setContentText("Erro ao listar funcionários: " + e.getMessage());
-            alert.showAndWait();
+            AlertUtils.erro("Erro", "Erro ao listar funcionários", "Erro ao listar funcionários: " + e.getMessage())
+                    .showAndWait();
         }
     }
 
@@ -211,26 +189,17 @@ public class funcionarioController {
 
                     funcionarioDAO funcionarioDAO = new funcionarioDAO();
                     funcionarioDAO.updateFuncionario(funcionario);
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Sucesso");
-                    alert.setHeaderText("Funcionário atualizado");
-                    alert.setContentText("Funcionário atualizado com sucesso!");
-                    alert.showAndWait();
+                    AlertUtils.info("Sucesso", "Funcionário atualizado", "Funcionário atualizado com sucesso!")
+                            .showAndWait();
                     listarButton();
                 }
             } else {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Aviso");
-                alert.setHeaderText("Nenhum funcionário selecionado");
-                alert.setContentText("Por favor, selecione um funcionário para atualizar.");
-                alert.showAndWait();
+                AlertUtils.aviso("Aviso", "Nenhum funcionário selecionado",
+                        "Por favor, selecione um funcionário para atualizar.").showAndWait();
             }
         } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText("Erro ao atualizar funcionário");
-            alert.setContentText("Erro ao atualizar funcionário: " + e.getMessage());
-            alert.showAndWait();
+            AlertUtils.erro("Erro", "Erro ao atualizar funcionário", "Erro ao atualizar funcionário: " + e.getMessage())
+                    .showAndWait();
         }
     }
 
@@ -243,25 +212,15 @@ public class funcionarioController {
 
                 funcionarioDAO funcionarioDAO = new funcionarioDAO();
                 funcionarioDAO.deleteFuncionario(funcionario);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Sucesso");
-                alert.setHeaderText("Funcionário excluído");
-                alert.setContentText("Funcionário excluído com sucesso!");
-                alert.showAndWait();
+                AlertUtils.info("Sucesso", "Funcionário excluído", "Funcionário excluído com sucesso!").showAndWait();
                 listarButton();
             } else {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Aviso");
-                alert.setHeaderText("Nenhum funcionário selecionado");
-                alert.setContentText("Por favor, selecione um funcionário para excluir.");
-                alert.showAndWait();
+                AlertUtils.aviso("Aviso", "Nenhum funcionário selecionado",
+                        "Por favor, selecione um funcionário para excluir.").showAndWait();
             }
         } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText("Erro ao excluir funcionário");
-            alert.setContentText("Erro ao excluir funcionário: " + e.getMessage());
-            alert.showAndWait();
+            AlertUtils.erro("Erro", "Erro ao excluir funcionário", "Erro ao excluir funcionário: " + e.getMessage())
+                    .showAndWait();
         }
     }
 

@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import biblioteca.fx.App;
 import biblioteca.fx.DAO.clienteDAO;
 import biblioteca.fx.DTO.clienteDTO;
+import biblioteca.fx.util.AlertUtils;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -83,28 +83,17 @@ public class clienteController {
                 clienteDTO.setEmail(email);
                 clienteDAO clienteDAO = new clienteDAO();
                 clienteDAO.addCliente(clienteDTO);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Success");
-                alert.setHeaderText("Client Added");
-                alert.setContentText("The client was added successfully.");
-                alert.showAndWait();
+                AlertUtils.info("Sucesso", "Cliente Cadastrado", "Cliente cadastrado com sucesso.").showAndWait();
                 nomeClienteField.clear();
                 telefoneField.clear();
                 emailField.clear();
                 listarButton();
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Missing Information");
-                alert.setContentText("Please fill in all fields.");
-                alert.showAndWait();
+                AlertUtils.erro("Erro", "Campos em Branco", "Por favor, preencha todos os campos.").showAndWait();
             }
         } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error Adding Client");
-            alert.setContentText("There was an error adding the client: " + e.getMessage());
-            alert.showAndWait();
+            AlertUtils.erro("Erro", "Erro ao cadastrar cliente", "Erro ao cadastrar cliente: " + e.getMessage())
+                    .showAndWait();
         }
     }
 
@@ -116,11 +105,8 @@ public class clienteController {
             ObservableList<clienteDTO> clientelist = javafx.collections.FXCollections.observableArrayList(clientes);
             clienteTableView.setItems(clientelist);
         } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error Listing Clients");
-            alert.setContentText("There was an error listing the clients: " + e.getMessage());
-            alert.showAndWait();
+            AlertUtils.erro("Erro", "Erro ao listar clientes", "Erro ao listar clientes: " + e.getMessage())
+                    .showAndWait();
         }
     }
 
@@ -137,32 +123,19 @@ public class clienteController {
                         && !emailField.getText().isEmpty()) {
                     clienteDAO clienteDAO = new clienteDAO();
                     clienteDAO.updateCliente(cliente);
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Success");
-                    alert.setHeaderText("Client Updated");
-                    alert.setContentText("The client was updated successfully.");
-                    alert.showAndWait();
+                    AlertUtils.info("Sucesso", "Cliente atualizado", "Cliente atualizado com sucesso.").showAndWait();
+                    cancelarButton();
                     listarButton();
                 } else {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Warning");
-                    alert.setHeaderText("Incomplete Data");
-                    alert.setContentText("Please fill in all required fields.");
-                    alert.showAndWait();
+                    AlertUtils.erro("Erro", "Campos em Branco", "Por favor, preencha todos os campos.").showAndWait();
                 }
             } catch (SQLException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Error Updating Client");
-                alert.setContentText("There was an error updating the client: " + e.getMessage());
-                alert.showAndWait();
+                AlertUtils.erro("Erro", "Erro ao atualizar cliente", "Erro ao atualizar cliente: " + e.getMessage())
+                        .showAndWait();
             }
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No Selection");
-            alert.setHeaderText("No Client Selected");
-            alert.setContentText("Please select a client in the table.");
-            alert.showAndWait();
+            AlertUtils.aviso("Aviso", "Nenhum Cliente Selecionado", "Por favor, selecione um cliente para atualizar.")
+                    .showAndWait();
         }
     }
 
@@ -174,26 +147,16 @@ public class clienteController {
             try {
                 clienteDAO clienteDAO = new clienteDAO();
                 clienteDAO.deleteCliente(cliente);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Success");
-                alert.setHeaderText("Client Deleted");
-                alert.setContentText("The client was deleted successfully.");
-                alert.showAndWait();
+                AlertUtils.info("Sucesso", "Cliente excluido", "Cliente excluido com sucesso.").showAndWait();
                 cancelarButton();
                 listarButton();
             } catch (SQLException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Error Deleting Client");
-                alert.setContentText("There was an error deleting the client: " + e.getMessage());
-                alert.showAndWait();
+                AlertUtils.erro("Erro", "Erro ao excluir cliente", "Erro ao excluir cliente: " + e.getMessage())
+                        .showAndWait();
             }
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No Selection");
-            alert.setHeaderText("No Client Selected");
-            alert.setContentText("Please select a client in the table.");
-            alert.showAndWait();
+            AlertUtils.aviso("Aviso", "Nenhum Cliente Selecionado", "Por favor, selecione um cliente para excluir.")
+                    .showAndWait();
         }
     }
 

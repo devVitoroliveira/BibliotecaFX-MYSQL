@@ -10,8 +10,8 @@ import biblioteca.fx.App;
 import biblioteca.fx.DAO.ConexaoDAO;
 import biblioteca.fx.DAO.userDAO;
 import biblioteca.fx.DTO.userDTO;
+import biblioteca.fx.util.AlertUtils;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 
 public class connectController {
 
@@ -26,11 +26,7 @@ public class connectController {
             ConexaoDAO conexaoDAO = new ConexaoDAO();
             conexaoDAO.conexaoBD();
         } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Database Connection Error");
-            alert.setHeaderText("Database Connection Error");
-            alert.setContentText("Error: " + e.getMessage());
-            alert.showAndWait();
+            AlertUtils.erro("Erro", "Erro de conexão com o banco de dados", "Erro: " + e.getMessage()).showAndWait();
         }
     }
 
@@ -51,25 +47,14 @@ public class connectController {
             ResultSet rs = userDAO.autenticarUsuario(user);
 
             if (rs.next()) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Login Successful");
-                alert.setHeaderText("Login Successful");
-                alert.setContentText("Welcome, " + name + "!");
-                alert.showAndWait();
+                AlertUtils.info("Login bem-sucedido", "Login bem-sucedido", "Bem-vindo, " + name + "!").showAndWait();
                 App.setRoot("main");
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Login Failed");
-                alert.setHeaderText("Login Failed");
-                alert.setContentText("Invalid username or password.");
-                alert.showAndWait();
+                AlertUtils.erro("Login mal-sucedido", "Login mal-sucedido", "Usuario ou senha incorretos.")
+                        .showAndWait();
             }
         } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Database Error");
-            alert.setHeaderText("Database Error");
-            alert.setContentText("Error: " + e.getMessage());
-            alert.showAndWait();
+            AlertUtils.erro("Erro", "Erro de autenticação", "Erro: " + e.getMessage()).showAndWait();
         }
     }
 }

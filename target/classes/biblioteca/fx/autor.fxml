@@ -1,45 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="608.0" prefWidth="897.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="biblioteca.fx.Controller.autorController">
+<BorderPane xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="biblioteca.fx.Controller.autorController"  style="-fx-background-color:#f5f5f5;">
+    <top>
+        <VBox style="-fx-background-color:#2b6ea3; -fx-padding:20;">
+            <Label text="Biblioteca - Sistema de Gestão" style="-fx-text-fill:white; -fx-font-size:22px; -fx-font-weight:bold;" />
+            <Label text="Gerenciar Autores" style="-fx-text-fill:#e0e0e0; -fx-font-size:13px; -fx-padding:5 0 0 0;" />
+        </VBox>
+    </top>
+    <left>
+        <VBox spacing="14">
+            <padding>
+               <Insets top="20" right="20" bottom="20" left="20" />
+            </padding>
+            <Label text="Informações do Autor" style="-fx-font-size:13px; -fx-font-weight:bold; -fx-text-fill:#333333;" />
+            <GridPane hgap="12" vgap="10">
+                <children>
+                    <Label text="Nome:" style="-fx-text-fill:#555555; -fx-font-weight:bold;" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                    <TextField fx:id="nomeAutorField" prefWidth="260" style="-fx-font-size:11px; -fx-padding:6; -fx-border-color:#d0d0d0;" GridPane.rowIndex="0" GridPane.columnIndex="1" />
 
-   <children>
-      <Button fx:id="salvarButton" layoutX="25.0" layoutY="553.0" mnemonicParsing="false" onAction="#salvarButton" text="Salvar" />
+                    <Label text="Nacionalidade:" style="-fx-text-fill:#555555; -fx-font-weight:bold;" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                    <TextField fx:id="nacionalidadeField" prefWidth="260" style="-fx-font-size:11px; -fx-padding:6; -fx-border-color:#d0d0d0;" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 
-            <Button fx:id="cancelarButton" layoutX="132.0" layoutY="553.0" mnemonicParsing="false" onAction="#cancelarButton" text="Cancelar" />
+                    <Label text="Data Início:" style="-fx-text-fill:#555555; -fx-font-weight:bold;" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                    <TextField fx:id="periodoVidaField" prefWidth="120" style="-fx-font-size:11px; -fx-padding:6; -fx-border-color:#d0d0d0;" GridPane.rowIndex="2" GridPane.columnIndex="1" promptText="DD/MM/YYYY"/>
 
-      <Label layoutX="16.0" layoutY="47.0" text="Nome" />
-      <Label layoutX="270.0" layoutY="47.0" text="Nacionalidade" />
+                    <Label text="Data Fim:" style="-fx-text-fill:#555555; -fx-font-weight:bold;" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                    <TextField fx:id="periodoFimField" prefWidth="120" style="-fx-font-size:11px; -fx-padding:6; -fx-border-color:#d0d0d0;" GridPane.rowIndex="3" GridPane.columnIndex="1"  promptText="DD/MM/YYYY"/>
+                </children>
+            </GridPane>
 
-      <TextField fx:id="nomeAutorField" layoutX="14.0" layoutY="76.0" />
+            <Label text="Ações" style="-fx-font-size:13px; -fx-font-weight:bold; -fx-text-fill:#333333; -fx-padding:12 0 0 0;" />
+            <VBox spacing="8">
+                <Button fx:id="salvarButton" mnemonicParsing="false" onAction="#salvarButton" text="➕ Adicionar" style="-fx-background-color:#4CAF50; -fx-text-fill:white; -fx-font-size:11px; -fx-font-weight:bold; -fx-padding:8 16 8 16; -fx-cursor:hand;" />
+                <Button fx:id="listButton" mnemonicParsing="false" onAction="#listButton" text="🔄 Atualizar Lista" style="-fx-background-color:#2196F3; -fx-text-fill:white; -fx-font-size:11px; -fx-font-weight:bold; -fx-padding:8 16 8 16; -fx-cursor:hand;" />
+                <Button fx:id="updateButton" mnemonicParsing="false" onAction="#updateButton" text="✏️ Alterar" style="-fx-background-color:#FF9800; -fx-text-fill:white; -fx-font-size:11px; -fx-font-weight:bold; -fx-padding:8 16 8 16; -fx-cursor:hand;" />
+                <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteButton" text="🗑️ Deletar" style="-fx-background-color:#F44336; -fx-text-fill:white; -fx-font-size:11px; -fx-font-weight:bold; -fx-padding:8 16 8 16; -fx-cursor:hand;" />
+                <Button fx:id="cancelarButton" mnemonicParsing="false" onAction="#cancelarButton" text="❌ Limpar" style="-fx-background-color:#9E9E9E; -fx-text-fill:white; -fx-font-size:11px; -fx-font-weight:bold; -fx-padding:8 16 8 16; -fx-cursor:hand;" />
+                <Button fx:id="backButton" mnemonicParsing="false" onAction="#backButton" text="⬅️ Voltar" style="-fx-background-color:#607D8B; -fx-text-fill:white; -fx-font-size:11px; -fx-font-weight:bold; -fx-padding:8 16 8 16; -fx-cursor:hand;" />
+            </VBox>
+        </VBox>
+    </left>
 
-      <TextField fx:id="nacionalidadeField" layoutX="271.0" layoutY="76.0" />
+    <center>
+        <VBox>
+            <padding>
+               <Insets top="20" right="20" bottom="20" left="20" />
+            </padding>
+            <Label text="Lista de Autores" style="-fx-font-size:13px; -fx-font-weight:bold; -fx-text-fill:#333333; -fx-padding:0 0 10 0;" />
+            <TableView fx:id="autorTableView" prefWidth="520" prefHeight="520" style="-fx-font-size:11px; -fx-table-cell-border-color:#e0e0e0; -fx-control-inner-background:#ffffff;">
+                <columns>
+                    <TableColumn fx:id="autorId" prefWidth="50" text="ID" style="-fx-alignment:CENTER;" />
+                    <TableColumn fx:id="autorNome" prefWidth="150" text="Nome" />
+                    <TableColumn fx:id="autorNacionalidade" prefWidth="130" text="Nacionalidade" />
+                    <TableColumn fx:id="autorPeriodoVida" prefWidth="95" text="Início" style="-fx-alignment:CENTER;" />
+                    <TableColumn fx:id="autorPeriodoFim" prefWidth="95" text="Fim" style="-fx-alignment:CENTER;" />
+                </columns>
+                <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy>
+            </TableView>
+        </VBox>
+    </center>
 
-      <Label layoutX="20.0" layoutY="181.0" text="Data Inicio" />
-      <Label layoutX="270.0" layoutY="181.0" text="Data Fim" />
-
-      <TextField fx:id="periodoVidaField" layoutX="14.0" layoutY="206.0" />
-
-      <TextField fx:id="periodoFimField" layoutX="270.0" layoutY="206.0" />
-      <TableView fx:id="autorTableView" layoutX="431.0" layoutY="14.0" prefHeight="200.0" prefWidth="444.0">
-    <columns>
-        <TableColumn fx:id="autorId" prefWidth="75.0" text="Id" />
-        <TableColumn fx:id="autorNome" prefWidth="75.0" text="Nome" />
-        <TableColumn fx:id="autorNacionalidade" prefWidth="101.0" text="Nacionalidade" />
-        <TableColumn fx:id="autorPeriodoVida" prefWidth="92.0" text="Data Inicio" />
-        <TableColumn fx:id="autorPeriodoFim" prefWidth="100.0" text="Data Fim" />
-    </columns>
-</TableView>
-      <Button layoutX="-224.0" layoutY="14.0" mnemonicParsing="false" text="Button" />
-      <Button fx:id="listButton" layoutX="245.0" layoutY="553.0" mnemonicParsing="false" onAction="#listButton" text="Listar" />
-      <Button fx:id="updateButton" layoutX="344.0" layoutY="553.0" mnemonicParsing="false" onAction="#updateButton" text="Alterar" />
-      <Button fx:id="backButton" layoutX="449.0" layoutY="553.0" mnemonicParsing="false" onAction="#backButton" text="Voltar" />
-      <Button fx:id="deleteButton" layoutX="537.0" layoutY="553.0" mnemonicParsing="false" onAction="#deleteButton" text="Deletar" />
-   </children>
-</Pane>
+    <bottom>
+        <Label text="v1.0 © 2025 Sistema de Biblioteca" style="-fx-text-fill:#999999; -fx-font-size:10px; -fx-padding:12;" alignment="CENTER" />
+    </bottom>
+</BorderPane>

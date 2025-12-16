@@ -19,9 +19,9 @@ public class ConexaoDAO {
             return conn;
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Database Connection Error");
-            alert.setHeaderText("Database Connection Error");
-            alert.setContentText("Error in conexaoBD: " + e.getMessage());
+            alert.setTitle("Erro");
+            alert.setHeaderText("Erro na conexaoBD");
+            alert.setContentText("Erro na conexaoBD: " + e.getMessage());
             alert.showAndWait();
         }
         return null;

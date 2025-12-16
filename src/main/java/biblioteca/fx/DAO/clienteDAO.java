@@ -16,6 +16,19 @@ public class clienteDAO {
     PreparedStatement pstm;
 
     @FXML
+    public ResultSet listarClientes() throws SQLException {
+        String sql = "SELECT * FROM cliente join pessoa p on p.idPessoa = cliente.idcliente";
+        try {
+            conn = new ConexaoDAO().conexaoBD();
+            pstm = conn.prepareStatement(sql);
+            rs = pstm.executeQuery();
+        } catch (SQLException e) {
+            throw e;
+        }
+        return rs;
+    }
+
+    @FXML
     public void addCliente(clienteDTO cliente) throws SQLException {
         pessoaDAO pessoaDAO = new pessoaDAO();
         int id_pessoa = pessoaDAO.addPessoa(cliente);
@@ -80,12 +93,12 @@ public class clienteDAO {
 
     @FXML
     public void deleteCliente(clienteDTO cliente) throws SQLException {
-        String sql = "DELETE FROM cliente WHERE idcliente = ?";
+        String sql = "DELETE from pessoa where idPessoa = ?";
         try {
             conn = new ConexaoDAO().conexaoBD();
             pstm = conn.prepareStatement(sql);
             pstm.setInt(1, cliente.getId_pessoa());
-            pstm.execute();
+            pstm.executeUpdate();
             pstm.close();
         } catch (SQLException e) {
             throw e;

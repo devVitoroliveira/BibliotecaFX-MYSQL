@@ -1,10 +1,12 @@
 package biblioteca.fx.DTO;
 
+import java.time.LocalDate;
+
 public class autorDTO extends Pessoa {
 
     private String nacionalidade;
-    private String periodoVida;
-    private String periodoFim;
+    private LocalDate periodoVida;
+    private LocalDate periodoFim;
 
     public autorDTO() {
     }
@@ -13,11 +15,11 @@ public class autorDTO extends Pessoa {
         super(id_pessoa, nome);
     }
 
-    public String getPeriodoFim() {
+    public LocalDate getPeriodoFim() {
         return periodoFim;
     }
 
-    public void setPeriodoFim(String periodoFim) {
+    public void setPeriodoFim(LocalDate periodoFim) {
         this.periodoFim = periodoFim;
     }
 
@@ -29,11 +31,11 @@ public class autorDTO extends Pessoa {
         this.nacionalidade = nacionalidade;
     }
 
-    public String getPeriodoVida() {
+    public LocalDate getPeriodoVida() {
         return periodoVida;
     }
 
-    public void setPeriodoVida(String periodoVida) {
+    public void setPeriodoVida(LocalDate periodoVida) {
         this.periodoVida = periodoVida;
     }
 

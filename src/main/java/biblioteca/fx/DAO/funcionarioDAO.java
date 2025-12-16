@@ -102,12 +102,12 @@ public class funcionarioDAO {
 
     @FXML
     public void deleteFuncionario(funcionarioDTO func) throws SQLException {
-        String sql = "DELETE FROM funcionario WHERE idfuncionario = ?";
+        String sql = "DELETE from pessoa where idPessoa = ?";
         try {
             conn = new ConexaoDAO().conexaoBD();
             pstm = conn.prepareStatement(sql);
             pstm.setInt(1, func.getId_pessoa());
-            pstm.execute();
+            pstm.executeUpdate();
             pstm.close();
         } catch (SQLException e) {
             throw e;

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.paint.Color?>
+
+<StackPane prefWidth="64" prefHeight="64" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color:#2b6ea3;">
+    <Rectangle width="64" height="64" fill="#2b6ea3" arcWidth="8" arcHeight="8" />
+    <Text text="📚" style="-fx-font-size:40px;" />
+</StackPane>

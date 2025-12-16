@@ -3,6 +3,7 @@ module biblioteca.fx {
     requires javafx.fxml;
     requires transitive java.sql;
     requires javafx.base;
+    requires javafx.graphics;
 
     opens biblioteca.fx to javafx.fxml;
     opens biblioteca.fx.Controller to javafx.fxml;

@@ -2,15 +2,17 @@ package biblioteca.fx.Controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import biblioteca.fx.App;
 import biblioteca.fx.DAO.autorDAO;
 import biblioteca.fx.DAO.pessoaDAO;
 import biblioteca.fx.DTO.autorDTO;
+import biblioteca.fx.util.AlertUtils;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -66,9 +68,11 @@ public class autorController {
 
     @FXML
     private TableColumn<autorDTO, String> autorPeriodoFim;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     @FXML
     public void initialize() throws SQLException {
+
         autorId.setCellValueFactory(new PropertyValueFactory<>("id_pessoa"));
         autorNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         autorNacionalidade.setCellValueFactory(new PropertyValueFactory<>("nacionalidade"));
@@ -81,10 +85,17 @@ public class autorController {
         autorTableView.setItems(autorList);
         autorTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
+                LocalDate data = newSelection.getPeriodoVida();
+                LocalDate fim = newSelection.getPeriodoFim();
                 nomeAutorField.setText(newSelection.getNome());
                 nacionalidadeField.setText(newSelection.getNacionalidade());
-                periodoVidaField.setText(newSelection.getPeriodoVida());
-                periodoFimField.setText(newSelection.getPeriodoFim() == null ? "" : newSelection.getPeriodoFim());
+                periodoVidaField.setText(data == null ? "" : data.format(formatter));
+                periodoFimField.setText(fim == null ? "" : fim.format(formatter));
+            } else {
+                nomeAutorField.clear();
+                nacionalidadeField.clear();
+                periodoVidaField.clear();
+                periodoFimField.clear();
             }
         });
     }
@@ -99,40 +110,35 @@ public class autorController {
             periodoFim = periodoFimField.getText();
 
             if (!nome.isEmpty() && !nacionalidade.isEmpty() && !periodoVida.isEmpty()) {
-                String fim = periodoFim.trim().isEmpty() ? null : periodoFim.trim();
 
                 autorDTO autor = new autorDTO();
                 autor.setNome(nome);
                 autor.setNacionalidade(nacionalidade);
-                autor.setPeriodoVida(periodoVida);
-                autor.setPeriodoFim(fim);
+                autor.setPeriodoVida(LocalDate.parse(periodoVida, formatter));
+                if (!periodoFim.isEmpty()) {
+                    autor.setPeriodoFim(LocalDate.parse(periodoFim, formatter));
+                } else {
+                    autor.setPeriodoFim(null);
+                }
                 pessoaDAO pessoaDAO = new pessoaDAO();
                 pessoaDAO.addPessoa(autor);
                 autorDAO autorDAO = new autorDAO();
                 autorDAO.addAutor(autor);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Success");
-                alert.setHeaderText("Author Added");
-                alert.setContentText("The author was added successfully.");
-                alert.showAndWait();
+                AlertUtils.info("Successo", "Autor Cadastrado", "Autor cadastrado com sucesso!").showAndWait();
                 nacionalidadeField.clear();
                 nomeAutorField.clear();
                 periodoVidaField.clear();
                 periodoFimField.clear();
                 listButton();
             } else {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Warning");
-                alert.setHeaderText("Incomplete Data");
-                alert.setContentText("Please fill in all required fields.");
-                alert.showAndWait();
+                AlertUtils
+                        .aviso("Erro", "Campos em branco",
+                                "Por favor, preencha todos os campos(nome, nacionalidade, periodo de vida).")
+                        .showAndWait();
             }
         } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error Adding Author");
-            alert.setContentText("There was an error adding the author: " + e.getMessage());
-            alert.showAndWait();
+            AlertUtils.erro("Error", "Erro ao cadastrar autor", "Erro ao cadastrar autor: " + e.getMessage())
+                    .showAndWait();
         }
     }
 
@@ -144,11 +150,8 @@ public class autorController {
             ObservableList<autorDTO> autorList = javafx.collections.FXCollections.observableArrayList(autores);
             autorTableView.setItems(autorList);
         } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error Getting Authors");
-            alert.setContentText("There was an error getting the authors: " + e.getMessage());
-            alert.showAndWait();
+            AlertUtils.erro("Error", "Error ao listar autores", "Erro ao listar autores: " + e.getMessage())
+                    .showAndWait();
         }
     }
 
@@ -157,45 +160,41 @@ public class autorController {
         int selectedIndex = autorTableView.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
             autorDTO autor = autorTableView.getSelectionModel().getSelectedItem();
-            autor.setNome(nomeAutorField.getText());
-            autor.setNacionalidade(nacionalidadeField.getText());
-            autor.setPeriodoVida(periodoVidaField.getText());
-            autor.setPeriodoFim(periodoFimField.getText());
+
             try {
                 if (!nomeAutorField.getText().isEmpty() && !nacionalidadeField.getText().isEmpty()
                         && !periodoVidaField.getText().isEmpty()) {
-                    String fim = null;
+                    autor.setNome(nomeAutorField.getText());
+                    autor.setNacionalidade(nacionalidadeField.getText());
+                    autor.setPeriodoVida(LocalDate.parse(periodoVidaField.getText(), formatter));
+
                     if (!periodoFimField.getText().trim().isEmpty()) {
-                        fim = periodoFimField.getText().trim();
+                        autor.setPeriodoFim(LocalDate.parse(periodoFimField.getText(), formatter));
+                    } else {
+                        autor.setPeriodoFim(null);
                     }
-                    autor.setPeriodoFim(fim);
                     autorDAO autorDAO = new autorDAO();
                     autorDAO.updateAutor(autor);
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Success");
-                    alert.setHeaderText("Author Updated");
-                    alert.setContentText("The author was updated successfully.");
-                    alert.showAndWait();
+                    AlertUtils.info("Successo", "Autor atualizado", "Autor atualizado com sucesso!").showAndWait();
                     nacionalidadeField.clear();
                     nomeAutorField.clear();
                     periodoVidaField.clear();
                     periodoFimField.clear();
                     listButton();
+                } else {
+                    AlertUtils
+                            .aviso("Erro", "Campos em branco",
+                                    "Por favor, preencha todos os campos(nome, nacionalidade, periodo de vida).")
+                            .showAndWait();
                 }
             } catch (SQLException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Error Updating Author");
-                alert.setContentText("There was an error updating the author: " + e.getMessage());
-                alert.showAndWait();
+                AlertUtils.erro("Erro", "Erro ao atualizar autor", "Erro ao atualizar autor: " + e.getMessage())
+                        .showAndWait();
             }
 
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No Selection");
-            alert.setHeaderText("No Author Selected");
-            alert.setContentText("Please select an author in the table.");
-            alert.showAndWait();
+            AlertUtils.aviso("Aviso", "Nehum autor selecionado", "Por favor, selecione um autor para autalizar.")
+                    .showAndWait();
         }
     }
 
@@ -207,29 +206,19 @@ public class autorController {
             try {
                 autorDAO autorDAO = new autorDAO();
                 autorDAO.deleteAutor(autor);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Success");
-                alert.setHeaderText("Author Deleted");
-                alert.setContentText("The author was deleted successfully.");
-                alert.showAndWait();
+                AlertUtils.info("Successo", "Autor excluído", "Autor excluido com sucesso.").showAndWait();
                 nacionalidadeField.clear();
                 nomeAutorField.clear();
                 periodoVidaField.clear();
                 periodoFimField.clear();
                 listButton();
             } catch (SQLException e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Error Deleting Author");
-                alert.setContentText("There was an error deleting the author: " + e.getMessage());
-                alert.showAndWait();
+                AlertUtils.erro("Erro", "Erro ao excluir autor", "Erro ao excluir autor: " + e.getMessage())
+                        .showAndWait();
             }
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No Selection");
-            alert.setHeaderText("No Author Selected");
-            alert.setContentText("Please select an author in the table.");
-            alert.showAndWait();
+            AlertUtils.aviso("Aviso", "Nehum autor selecionado", "Por favor, selecione um autor para excluir.")
+                    .showAndWait();
         }
     }
 

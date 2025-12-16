@@ -18,6 +18,19 @@ public class autorDAO {
     ResultSet rs;
 
     @FXML
+    public ResultSet listarAutores() throws SQLException {
+        String sql = "select * from autor join pessoa p on p.idPessoa = autor.idautor";
+        try {
+            conn = new ConexaoDAO().conexaoBD();
+            pstm = conn.prepareStatement(sql);
+            rs = pstm.executeQuery();
+        } catch (SQLException e) {
+            throw e;
+        }
+        return rs;
+    }
+
+    @FXML
     public void addAutor(autorDTO autor) throws SQLException {
         pessoaDAO pessoaDAO = new pessoaDAO();
         int id_pessoa = pessoaDAO.addPessoa(autor);
@@ -32,8 +45,8 @@ public class autorDAO {
             pstm = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             pstm.setInt(1, autor.getId_pessoa());
             pstm.setString(2, autor.getNacionalidade());
-            pstm.setString(3, autor.getPeriodoVida());
-            pstm.setString(4, autor.getPeriodoFim());
+            pstm.setDate(3, autor.getPeriodoVida() != null ? java.sql.Date.valueOf(autor.getPeriodoVida() + "") : null);
+            pstm.setDate(4, autor.getPeriodoFim() != null ? java.sql.Date.valueOf(autor.getPeriodoFim()) : null);
             pstm.execute();
             rs = pstm.getGeneratedKeys();
             pstm.close();
@@ -54,8 +67,8 @@ public class autorDAO {
                 autor.setId_pessoa(rs.getInt("idPessoa"));
                 autor.setNome(rs.getString("nomePessoa"));
                 autor.setNacionalidade(rs.getString("nacionalidade"));
-                autor.setPeriodoVida(rs.getString("dataInicio"));
-                autor.setPeriodoFim(rs.getString("dataFim"));
+                autor.setPeriodoVida(rs.getDate("dataInicio") != null ? rs.getDate("dataInicio").toLocalDate() : null);
+                autor.setPeriodoFim(rs.getString("dataFim") != null ? rs.getDate("dataFim").toLocalDate() : null);
                 autores.add(autor);
             }
             pstm.close();
@@ -77,8 +90,8 @@ public class autorDAO {
             pstm = conn.prepareStatement(sql);
             pstm.setString(1, autor.getNome());
             pstm.setString(2, autor.getNacionalidade());
-            pstm.setString(3, autor.getPeriodoVida());
-            pstm.setString(4, autor.getPeriodoFim());
+            pstm.setDate(3, autor.getPeriodoVida() != null ? java.sql.Date.valueOf(autor.getPeriodoVida() + "") : null);
+            pstm.setDate(4, autor.getPeriodoFim() != null ? java.sql.Date.valueOf(autor.getPeriodoFim() + "") : null);
             pstm.setInt(5, autor.getId_pessoa());
 
             pstm.executeUpdate();
@@ -94,12 +107,12 @@ public class autorDAO {
 
     @FXML
     public void deleteAutor(autorDTO autor) throws SQLException {
-        String sql = "delete from autor where idautor = ?";
+        String sql = "delete from pessoa where idPessoa = ?";
         try {
             conn = new ConexaoDAO().conexaoBD();
             pstm = conn.prepareStatement(sql);
             pstm.setInt(1, autor.getId_pessoa());
-            pstm.execute();
+            pstm.executeUpdate();
             pstm.close();
         } catch (SQLException e) {
             throw e;

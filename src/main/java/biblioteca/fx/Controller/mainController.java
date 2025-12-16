@@ -14,6 +14,8 @@ public class mainController {
     private Button cliente;
     @FXML
     private Button func;
+    @FXML
+    private Button emprestimoButton;
 
     @FXML
     private void abrirTelaAutor() throws IOException {
@@ -28,5 +30,15 @@ public class mainController {
     @FXML
     private void abrirTelaFuncionario() throws IOException {
         App.setRoot("funcionario");
+    }
+
+    @FXML
+    private void abrirTelaEmp() throws IOException {
+        App.setRoot("emprestimo");
+    }
+
+    @FXML
+    private void abrirTelaLivro() throws IOException {
+        App.setRoot("livro");
     }
 }
