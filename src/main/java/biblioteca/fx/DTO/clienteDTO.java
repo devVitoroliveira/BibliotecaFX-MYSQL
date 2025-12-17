@@ -17,6 +17,15 @@ public class clienteDTO extends Pessoa {
     }
 
     public void setTelefone(String telefone) {
+        if (telefone.isEmpty() || telefone == null) {
+            throw new IllegalArgumentException("O telefone não pode estar vazio");
+        }
+        if (telefone.length() != 11) {
+            throw new IllegalArgumentException("O telefone deve ter 11 dígitos");
+        }
+        if (!telefone.matches("[0-9]+")) {
+            throw new IllegalArgumentException("O telefone deve conter apenas números");
+        }
         this.telefone = telefone;
     }
 
@@ -25,6 +34,9 @@ public class clienteDTO extends Pessoa {
     }
 
     public void setEmail(String email) {
+        if (email.isEmpty() || email == null) {
+            throw new IllegalArgumentException("O email não pode estar vazio");
+        }
         this.email = email;
     }
 

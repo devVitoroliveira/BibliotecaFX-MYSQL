@@ -44,6 +44,9 @@ public class livroDTO {
     }
 
     public void setNomeLivro(String nomeLivro) {
+        if (nomeLivro == null || nomeLivro.isEmpty()) {
+            throw new IllegalArgumentException("O nome do livro não pode ser vazio.");
+        }
         this.nomeLivro = nomeLivro;
     }
 
@@ -68,6 +71,9 @@ public class livroDTO {
     }
 
     public void setGenero(String genero) {
+        if (genero == null || genero.isEmpty()) {
+            throw new IllegalArgumentException("O gênero do livro não pode ser vazio.");
+        }
         this.genero = genero;
     }
 

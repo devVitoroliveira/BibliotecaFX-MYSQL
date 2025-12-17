@@ -26,6 +26,8 @@ public abstract class Pessoa {
     }
 
     public void setNome(String nome) {
+        if (nome == null || nome.isEmpty() || !nome.matches("[a-zA-Z ]+"))
+            throw new IllegalArgumentException("O nome deve conter apenas letras e espaços.");
         this.nome = nome;
     }
 

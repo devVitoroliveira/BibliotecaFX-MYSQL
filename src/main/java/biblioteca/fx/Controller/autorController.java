@@ -110,13 +110,37 @@ public class autorController {
             periodoFim = periodoFimField.getText();
 
             if (!nome.isEmpty() && !nacionalidade.isEmpty() && !periodoVida.isEmpty()) {
-
+                if (!nome.matches("[a-zA-Z ]+")) {
+                    AlertUtils
+                            .aviso("Erro", "Nome inválido",
+                                    "O nome deve conter apenas letras e espaços.")
+                            .showAndWait();
+                    return;
+                } else if (!nacionalidade.matches("[a-zA-Z ]+")) {
+                    AlertUtils
+                            .aviso("Erro", "Nacionalidade inválida",
+                                    "A nacionalidade deve conter apenas letras e espaços.")
+                            .showAndWait();
+                    return;
+                } else if (!periodoVida.matches("\\d{2}-\\d{2}-\\d{4}")) {
+                    AlertUtils
+                            .aviso("Erro", "Data inválida",
+                                    "A data deve estar no formato dd-MM-yyyy.")
+                            .showAndWait();
+                    return;
+                }
                 autorDTO autor = new autorDTO();
                 autor.setNome(nome);
                 autor.setNacionalidade(nacionalidade);
                 autor.setPeriodoVida(LocalDate.parse(periodoVida, formatter));
                 if (!periodoFim.isEmpty()) {
                     autor.setPeriodoFim(LocalDate.parse(periodoFim, formatter));
+                } else if (!periodoFim.matches("\\d{2}-\\d{2}-\\d{4}")) {
+                    AlertUtils
+                            .aviso("Erro", "Data inválida",
+                                    "A data deve estar no formato dd-MM-yyyy.")
+                            .showAndWait();
+                    return;
                 } else {
                     autor.setPeriodoFim(null);
                 }
@@ -167,9 +191,35 @@ public class autorController {
                     autor.setNome(nomeAutorField.getText());
                     autor.setNacionalidade(nacionalidadeField.getText());
                     autor.setPeriodoVida(LocalDate.parse(periodoVidaField.getText(), formatter));
-
+                    if (!nomeAutorField.getText().matches(".*[^A-Za-zÀ-ÿ ].*")) {
+                        AlertUtils
+                                .aviso("Erro", "Nome inválido",
+                                        "O nome deve conter apenas letras e espaços.")
+                                .showAndWait();
+                        return;
+                    }
+                    if (!nacionalidadeField.getText().matches(".*[^A-Za-zÀ-ÿ ].*")) {
+                        AlertUtils
+                                .aviso("Erro", "Nacionalidade inválida",
+                                        "A nacionalidade deve conter apenas letras e espaços.")
+                                .showAndWait();
+                        return;
+                    }
+                    if (!periodoVidaField.getText().matches("\\d{2}-\\d{2}-\\d{4}")) {
+                        AlertUtils
+                                .aviso("Erro", "Data inválida",
+                                        "A data deve estar no formato dd-MM-yyyy.")
+                                .showAndWait();
+                        return;
+                    }
                     if (!periodoFimField.getText().trim().isEmpty()) {
                         autor.setPeriodoFim(LocalDate.parse(periodoFimField.getText(), formatter));
+                    } else if (!periodoFimField.getText().matches("\\d{2}-\\d{2}-\\d{4}")) {
+                        AlertUtils
+                                .aviso("Erro", "Data inválida",
+                                        "A data deve estar no formato dd-MM-yyyy.")
+                                .showAndWait();
+                        return;
                     } else {
                         autor.setPeriodoFim(null);
                     }

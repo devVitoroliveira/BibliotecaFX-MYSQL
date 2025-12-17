@@ -20,6 +20,12 @@ public class autorDTO extends Pessoa {
     }
 
     public void setPeriodoFim(LocalDate periodoFim) {
+        if (periodoFim == null || periodoFim.isEqual(null)) {
+            throw new IllegalArgumentException("A data de falecimento não pode ser nula.");
+        }
+        if (periodoFim.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("A data de falecimento não pode ser futura.");
+        }
         this.periodoFim = periodoFim;
     }
 
@@ -28,6 +34,8 @@ public class autorDTO extends Pessoa {
     }
 
     public void setNacionalidade(String nacionalidade) {
+        if (nacionalidade == null || nacionalidade.isEmpty() || !nacionalidade.matches("[a-zA-Z ]+"))
+            throw new IllegalArgumentException("A nacionalidade deve conter apenas letras e espaços.");
         this.nacionalidade = nacionalidade;
     }
 
@@ -36,6 +44,15 @@ public class autorDTO extends Pessoa {
     }
 
     public void setPeriodoVida(LocalDate periodoVida) {
+        if (periodoVida == null || periodoVida.isEqual(null)) {
+            throw new IllegalArgumentException("A data de nascimento não pode ser nula.");
+        }
+        if (periodoVida.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("A data de nascimento não pode ser futura.");
+        }
+        if (periodoVida.isEqual(LocalDate.now())) {
+            throw new IllegalArgumentException("A data de nascimento não pode ser hoje.");
+        }
         this.periodoVida = periodoVida;
     }
 

@@ -77,6 +77,13 @@ public class clienteController {
             telefone = telefoneField.getText();
             email = emailField.getText();
             if (!nome.isEmpty() && !telefone.isEmpty() && !email.isEmpty()) {
+                if (!nome.matches("[a-zA-Z ]+")) {
+                    AlertUtils
+                            .aviso("Erro", "Nome inválido",
+                                    "O nome deve conter apenas letras e espaços.")
+                            .showAndWait();
+                    return;
+                }
                 clienteDTO clienteDTO = new clienteDTO();
                 clienteDTO.setNome(nome);
                 clienteDTO.setTelefone(telefone);
@@ -121,6 +128,13 @@ public class clienteController {
             try {
                 if (!nomeClienteField.getText().isEmpty() && !telefoneField.getText().isEmpty()
                         && !emailField.getText().isEmpty()) {
+                    if (!nomeClienteField.getText().matches("[a-zA-Z ]+")) {
+                        AlertUtils
+                                .aviso("Erro", "Nome inválido",
+                                        "O nome deve conter apenas letras e espaços.")
+                                .showAndWait();
+                        return;
+                    }
                     clienteDAO clienteDAO = new clienteDAO();
                     clienteDAO.updateCliente(cliente);
                     AlertUtils.info("Sucesso", "Cliente atualizado", "Cliente atualizado com sucesso.").showAndWait();

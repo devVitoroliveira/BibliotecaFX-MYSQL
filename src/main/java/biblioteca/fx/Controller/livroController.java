@@ -110,44 +110,53 @@ public class livroController {
 
     @FXML
     private void salvarButton() throws SQLException {
-        String livro, genero, ano, ibsn;
-        livro = livroField.getText();
-        genero = generoField.getText();
-        ano = anoField.getText();
-        ibsn = ibsnField.getText();
-        int livroIdx = livroComboBox.getSelectionModel().getSelectedIndex();
-        livroDTO l = new livroDTO();
-        if (livroIdx < 0) {
-            AlertUtils.erro("Erro", "Campos em branco", "Por favor, selecione um autor.").showAndWait();
-            return;
-        }
-        l.setNomeLivro(livro);
-        l.setGenero(genero);
-        l.setAno(ano);
-        l.setIbsn(ibsn);
-        l.setIdautor(idAutores.get(livroIdx));
-        if (!livro.isEmpty() && !genero.isEmpty() && !ano.isEmpty() && !ibsn.isEmpty()) {
-            livroDAO ldao = new livroDAO();
-            ldao.addLivro(l);
-            AlertUtils.info("Sucesso", "Livro cadastrado", "Livro cadastrado com sucesso!").showAndWait();
-            livroField.clear();
-            generoField.clear();
-            anoField.clear();
-            ibsnField.clear();
-            livroComboBox.getSelectionModel().clearSelection();
-            carregarAutores();
-            listarButton();
-        } else {
-            AlertUtils.erro("Erro", "Campos em branco", "Por favor, preencha todos os campos.").showAndWait();
+        try {
+            String livro, genero, ano, ibsn;
+            livro = livroField.getText();
+            genero = generoField.getText();
+            ano = anoField.getText();
+            ibsn = ibsnField.getText();
+            int livroIdx = livroComboBox.getSelectionModel().getSelectedIndex();
+            livroDTO l = new livroDTO();
+            if (livroIdx < 0) {
+                AlertUtils.erro("Erro", "Campos em branco", "Por favor, selecione um autor.").showAndWait();
+                return;
+            }
+            l.setNomeLivro(livro);
+            l.setGenero(genero);
+            l.setAno(ano);
+            l.setIbsn(ibsn);
+            l.setIdautor(idAutores.get(livroIdx));
+            if (!livro.isEmpty() && !genero.isEmpty() && !ano.isEmpty() && !ibsn.isEmpty()) {
+                livroDAO ldao = new livroDAO();
+                ldao.addLivro(l);
+                AlertUtils.info("Sucesso", "Livro cadastrado", "Livro cadastrado com sucesso!").showAndWait();
+                livroField.clear();
+                generoField.clear();
+                anoField.clear();
+                ibsnField.clear();
+                livroComboBox.getSelectionModel().clearSelection();
+                carregarAutores();
+                listarButton();
+            } else {
+                AlertUtils.erro("Erro", "Campos em branco", "Por favor, preencha todos os campos.").showAndWait();
+            }
+        } catch (SQLException e) {
+            AlertUtils.erro("Erro", "Erro ao cadastrar livro", "Erro ao cadastrar livro: " + e.getMessage())
+                    .showAndWait();
         }
     }
 
     @FXML
     private void listarButton() throws SQLException {
-        livroDAO ldao = new livroDAO();
-        ArrayList<livroDTO> livros = ldao.getLivros();
-        ObservableList<livroDTO> livroList = javafx.collections.FXCollections.observableArrayList(livros);
-        livroTableView.setItems(livroList);
+        try {
+            livroDAO ldao = new livroDAO();
+            ArrayList<livroDTO> livros = ldao.getLivros();
+            ObservableList<livroDTO> livroList = javafx.collections.FXCollections.observableArrayList(livros);
+            livroTableView.setItems(livroList);
+        } catch (SQLException e) {
+            AlertUtils.erro("Erro", "Erro ao listar livros", "Erro ao listar livros: " + e.getMessage()).showAndWait();
+        }
     }
 
     @FXML
@@ -180,6 +189,8 @@ public class livroController {
                 } else {
                     AlertUtils.erro("Erro", "Campos em branco", "Por favor, preencha todos os campos.").showAndWait();
                 }
+            } else {
+                AlertUtils.erro("Erro", "Campos em branco", "Por favor, selecione um livro.").showAndWait();
             }
         } catch (SQLException e) {
             AlertUtils.erro("Erro", "Erro ao atualizar livro", "Erro ao atualizar livro: " + e.getMessage())

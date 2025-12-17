@@ -123,18 +123,25 @@ public class funcionarioController {
             int cargoIndex = cargoComboBox.getSelectionModel().getSelectedIndex();
 
             funcionarioDTO funcionario = new funcionarioDTO();
-            funcionario.setNome(nome);
-            funcionario.setTelefone(telefone);
-            funcionario.setEmail(email);
-            funcionario.setSalario(salario);
             if (cargoIndex < 0) {
                 AlertUtils.aviso("Aviso", "Campos em branco", "Por favor, selecione um cargo.").showAndWait();
                 return;
             }
+            funcionario.setNome(nome);
+            funcionario.setTelefone(telefone);
+            funcionario.setEmail(email);
+            funcionario.setSalario(salario);
 
             funcionario.setId_cargo(Id.get(cargoIndex));
 
             if (!nome.isEmpty() && !telefone.isEmpty() && !email.isEmpty()) {
+
+                if (!nome.matches("[a-zA-Z ]+")) {
+                    AlertUtils
+                            .aviso("Erro", "Nome inválido",
+                                    "O nome deve conter apenas letras e espaços.")
+                            .showAndWait();
+                }
                 funcionarioDAO funcionarioDAO = new funcionarioDAO();
                 funcionarioDAO.addFuncionario(funcionario);
 
@@ -152,6 +159,8 @@ public class funcionarioController {
         } catch (SQLException e) {
             AlertUtils.erro("Erro", "Erro ao adicionar funcionário", "Erro ao adicionar funcionário: " + e.getMessage())
                     .showAndWait();
+        } catch (NumberFormatException e) {
+            AlertUtils.erro("Erro", "Erro ao adicionar funcionário", "Salário não pode ser vazio.").showAndWait();
         }
     }
 
@@ -187,11 +196,27 @@ public class funcionarioController {
                 if (!nomeFuncionarioField.getText().isEmpty() && !telefoneField.getText().isEmpty()
                         && !emailField.getText().isEmpty() && cargoIndex >= 0) {
 
+                    if (!nomeFuncionarioField.getText().matches("[a-zA-Z ]+")) {
+                        AlertUtils
+                                .aviso("Erro", "Nome inválido",
+                                        "O nome deve conter apenas letras e espaços.")
+                                .showAndWait();
+                        return;
+                    }
+                    if (!salarioField.getText().matches("\\d+")) {
+                        AlertUtils
+                                .aviso("Erro", "Salario inválido",
+                                        "O salario deve conter apenas numeros.")
+                                .showAndWait();
+                        return;
+                    }
                     funcionarioDAO funcionarioDAO = new funcionarioDAO();
                     funcionarioDAO.updateFuncionario(funcionario);
                     AlertUtils.info("Sucesso", "Funcionário atualizado", "Funcionário atualizado com sucesso!")
                             .showAndWait();
                     listarButton();
+                } else {
+                    AlertUtils.aviso("Aviso", "Campos em branco", "Por favor, preencha todos os campos.").showAndWait();
                 }
             } else {
                 AlertUtils.aviso("Aviso", "Nenhum funcionário selecionado",
@@ -200,6 +225,8 @@ public class funcionarioController {
         } catch (SQLException e) {
             AlertUtils.erro("Erro", "Erro ao atualizar funcionário", "Erro ao atualizar funcionário: " + e.getMessage())
                     .showAndWait();
+        } catch (NumberFormatException e) {
+            AlertUtils.erro("Erro", "Erro ao atualizar funcionário", "Salário nao pode ser vazio.").showAndWait();
         }
     }
 

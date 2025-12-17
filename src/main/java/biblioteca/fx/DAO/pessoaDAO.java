@@ -22,6 +22,7 @@ public class pessoaDAO {
         try {
             conn = new ConexaoDAO().conexaoBD();
             pstm = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+
             pstm.setString(1, p.getNome());
             pstm.execute();
             ResultSet rs = pstm.getGeneratedKeys();

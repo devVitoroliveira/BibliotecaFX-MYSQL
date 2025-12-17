@@ -131,51 +131,61 @@ public class emprestimoController {
 
     @FXML
     private void salvarButton() throws SQLException {
-        String inicio, fim;
-        inicio = inicioField.getText();
-        fim = fimField.getText();
-        int livroIdx = livroBox.getSelectionModel().getSelectedIndex();
-        int clienteIdx = emprestimoComboBox.getSelectionModel().getSelectedIndex();
-        emprestimoDTO emprestimo = new emprestimoDTO();
+        try {
+            String inicio, fim;
+            inicio = inicioField.getText();
+            fim = fimField.getText();
+            int livroIdx = livroBox.getSelectionModel().getSelectedIndex();
+            int clienteIdx = emprestimoComboBox.getSelectionModel().getSelectedIndex();
+            emprestimoDTO emprestimo = new emprestimoDTO();
 
-        if (livroIdx < 0) {
-            AlertUtils.erro("Erro", "Campos em branco", "Por favor, selecione um livro.").showAndWait();
-            return;
-        }
+            if (livroIdx < 0) {
+                AlertUtils.erro("Erro", "Campos em branco", "Por favor, selecione um livro.").showAndWait();
+                return;
+            }
 
-        if (clienteIdx < 0) {
-            AlertUtils.erro("Erro", "Campos em branco", "Por favor, selecione um cliente.").showAndWait();
-            return;
-        }
+            if (clienteIdx < 0) {
+                AlertUtils.erro("Erro", "Campos em branco", "Por favor, selecione um cliente.").showAndWait();
+                return;
+            }
 
-        emprestimo.setId_livro(IdLivros.get(livroIdx));
-        emprestimo.setData_emprestimo(inicio);
-        emprestimo.setData_devolucao(fim);
-        emprestimo.setId_cliente(Id.get(clienteIdx));
+            emprestimo.setId_livro(IdLivros.get(livroIdx));
+            emprestimo.setData_emprestimo(inicio);
+            emprestimo.setData_devolucao(fim);
+            emprestimo.setId_cliente(Id.get(clienteIdx));
 
-        if (!inicio.isEmpty() && !fim.isEmpty()) {
-            emprestimoDAO emprestimoDAO = new emprestimoDAO();
-            emprestimoDAO.addEmprestimo(emprestimo);
-            AlertUtils.info("Sucesso", "Empréstimo realizado", "Empréstimo realizado com sucesso!").showAndWait();
-            inicioField.clear();
-            fimField.clear();
-            livroBox.getSelectionModel().clearSelection();
-            emprestimoComboBox.getSelectionModel().clearSelection();
-            listarButton();
-        } else {
-            AlertUtils.aviso("Aviso", "Campos em branco", "Por favor, preencha as datas de empréstimo e devolução.")
+            if (!inicio.isEmpty() && !fim.isEmpty()) {
+                emprestimoDAO emprestimoDAO = new emprestimoDAO();
+                emprestimoDAO.addEmprestimo(emprestimo);
+                AlertUtils.info("Sucesso", "Empréstimo realizado", "Empréstimo realizado com sucesso!").showAndWait();
+                inicioField.clear();
+                fimField.clear();
+                livroBox.getSelectionModel().clearSelection();
+                emprestimoComboBox.getSelectionModel().clearSelection();
+                listarButton();
+            } else {
+                AlertUtils.aviso("Aviso", "Campos em branco", "Por favor, preencha as datas de empréstimo e devolução.")
+                        .showAndWait();
+            }
+        } catch (SQLException e) {
+            AlertUtils.erro("Erro", "Erro ao realizar empréstimo", "Erro ao realizar empréstimo: " + e.getMessage())
                     .showAndWait();
         }
     }
 
     @FXML
     private void listarButton() throws SQLException {
-        emprestimoDAO emprestimoDAO = new emprestimoDAO();
-        emprestimoDAO.getEmprestimos();
-        ArrayList<emprestimoDTO> emprestimos = emprestimoDAO.getEmprestimos();
-        ObservableList<emprestimoDTO> emprestimoList = javafx.collections.FXCollections
-                .observableArrayList(emprestimos);
-        emprestimoTableView.setItems(emprestimoList);
+        try {
+            emprestimoDAO emprestimoDAO = new emprestimoDAO();
+            emprestimoDAO.getEmprestimos();
+            ArrayList<emprestimoDTO> emprestimos = emprestimoDAO.getEmprestimos();
+            ObservableList<emprestimoDTO> emprestimoList = javafx.collections.FXCollections
+                    .observableArrayList(emprestimos);
+            emprestimoTableView.setItems(emprestimoList);
+        } catch (SQLException e) {
+            AlertUtils.erro("Erro", "Erro ao listar empréstimos", "Erro ao listar empréstimos: " + e.getMessage())
+                    .showAndWait();
+        }
     }
 
     @FXML

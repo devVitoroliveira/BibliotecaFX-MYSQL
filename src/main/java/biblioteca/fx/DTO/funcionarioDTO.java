@@ -20,6 +20,15 @@ public class funcionarioDTO extends Pessoa {
     }
 
     public void setTelefone(String telefone) {
+        if (telefone.isEmpty() || telefone == null) {
+            throw new IllegalArgumentException("O telefone não pode estar vazio");
+        }
+        if (telefone.length() != 11) {
+            throw new IllegalArgumentException("O telefone deve ter 11 dígitos");
+        }
+        if (!telefone.matches("[0-9]+")) {
+            throw new IllegalArgumentException("O telefone deve conter apenas números");
+        }
         this.telefone = telefone;
     }
 
@@ -28,6 +37,9 @@ public class funcionarioDTO extends Pessoa {
     }
 
     public void setEmail(String email) {
+        if (email.isEmpty() || email == null) {
+            throw new IllegalArgumentException("O email não pode estar vazio");
+        }
         this.email = email;
     }
 
@@ -44,6 +56,9 @@ public class funcionarioDTO extends Pessoa {
     }
 
     public void setSalario(double salario) {
+        if (salario <= 0) {
+            throw new IllegalArgumentException("O salário não pode ser menor ou igual a zero");
+        }
         this.salario = salario;
     }
 

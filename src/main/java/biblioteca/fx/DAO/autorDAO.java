@@ -45,7 +45,7 @@ public class autorDAO {
             pstm = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             pstm.setInt(1, autor.getId_pessoa());
             pstm.setString(2, autor.getNacionalidade());
-            pstm.setDate(3, autor.getPeriodoVida() != null ? java.sql.Date.valueOf(autor.getPeriodoVida() + "") : null);
+            pstm.setDate(3, autor.getPeriodoVida() != null ? java.sql.Date.valueOf(autor.getPeriodoVida()) : null);
             pstm.setDate(4, autor.getPeriodoFim() != null ? java.sql.Date.valueOf(autor.getPeriodoFim()) : null);
             pstm.execute();
             rs = pstm.getGeneratedKeys();
@@ -90,7 +90,7 @@ public class autorDAO {
             pstm = conn.prepareStatement(sql);
             pstm.setString(1, autor.getNome());
             pstm.setString(2, autor.getNacionalidade());
-            pstm.setDate(3, autor.getPeriodoVida() != null ? java.sql.Date.valueOf(autor.getPeriodoVida() + "") : null);
+            pstm.setDate(3, autor.getPeriodoVida() != null ? java.sql.Date.valueOf(autor.getPeriodoVida()) : null);
             pstm.setDate(4, autor.getPeriodoFim() != null ? java.sql.Date.valueOf(autor.getPeriodoFim() + "") : null);
             pstm.setInt(5, autor.getId_pessoa());
 
