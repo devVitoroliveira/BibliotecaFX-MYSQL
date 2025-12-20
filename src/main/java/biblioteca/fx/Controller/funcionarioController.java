@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -66,8 +67,20 @@ public class funcionarioController {
         funcionarioId.setCellValueFactory(new PropertyValueFactory<>("id_pessoa"));
         funcionarioNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         funcionarioTelefone.setCellValueFactory(new PropertyValueFactory<>("telefone"));
+        funcionarioTelefone.setCellFactory(col -> new TableCell<funcionarioDTO, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.replaceFirst("(\\d{2})(\\d{5})(\\d{4})", "($1) $2-$3"));
+                }
+            }
+        });
         funcionarioEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         funcionarioSalario.setCellValueFactory(new PropertyValueFactory<>("salario"));
+        funcionarioSalario.setStyle("-fx-alignment: CENTER-LEFT;");
         funcionarioCargo.setCellValueFactory(new PropertyValueFactory<>("cargo"));
         funcionarioDAO funcionarioDAO = new funcionarioDAO();
         funcionarioDAO.getFuncionarios();
@@ -161,6 +174,8 @@ public class funcionarioController {
                     .showAndWait();
         } catch (NumberFormatException e) {
             AlertUtils.erro("Erro", "Erro ao adicionar funcionário", "Salário não pode ser vazio.").showAndWait();
+        } catch (IllegalArgumentException e) {
+            AlertUtils.erro("Erro", "Erro ao adicionar funcionário", e.getMessage()).showAndWait();
         }
     }
 

@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 import biblioteca.fx.App;
 import biblioteca.fx.DAO.autorDAO;
-import biblioteca.fx.DAO.pessoaDAO;
 import biblioteca.fx.DTO.autorDTO;
 import biblioteca.fx.util.AlertUtils;
 import javafx.collections.ObservableList;
@@ -116,36 +116,49 @@ public class autorController {
                                     "O nome deve conter apenas letras e espaços.")
                             .showAndWait();
                     return;
-                } else if (!nacionalidade.matches("[a-zA-Z ]+")) {
+                }
+                if (!nacionalidade.matches("[a-zA-Z ]+")) {
                     AlertUtils
                             .aviso("Erro", "Nacionalidade inválida",
                                     "A nacionalidade deve conter apenas letras e espaços.")
                             .showAndWait();
                     return;
-                } else if (!periodoVida.matches("\\d{2}-\\d{2}-\\d{4}")) {
+                }
+                if (!periodoVida.matches("\\d{2}-\\d{2}-\\d{4}")) {
                     AlertUtils
                             .aviso("Erro", "Data inválida",
-                                    "A data deve estar no formato dd-MM-yyyy.")
+                                    "A data de nascimento deve estar no formato dd-MM-yyyy.")
                             .showAndWait();
                     return;
                 }
                 autorDTO autor = new autorDTO();
                 autor.setNome(nome);
                 autor.setNacionalidade(nacionalidade);
-                autor.setPeriodoVida(LocalDate.parse(periodoVida, formatter));
-                if (!periodoFim.isEmpty()) {
-                    autor.setPeriodoFim(LocalDate.parse(periodoFim, formatter));
-                } else if (!periodoFim.matches("\\d{2}-\\d{2}-\\d{4}")) {
-                    AlertUtils
-                            .aviso("Erro", "Data inválida",
-                                    "A data deve estar no formato dd-MM-yyyy.")
+                try {
+                    autor.setPeriodoVida(LocalDate.parse(periodoVida, formatter));
+                } catch (DateTimeParseException e) {
+                    AlertUtils.erro("Erro", "Data inválida", "Uma das datas é inválida.")
                             .showAndWait();
                     return;
+                }
+                if (!periodoFim.isEmpty()) {
+                    if (!periodoFim.matches("\\d{2}-\\d{2}-\\d{4}")) {
+                        AlertUtils
+                                .aviso("Erro", "Data inválida",
+                                        "A data de falecimento deve estar no formato dd-MM-yyyy.")
+                                .showAndWait();
+                        return;
+                    }
+                    try {
+                        autor.setPeriodoFim(LocalDate.parse(periodoFim, formatter));
+                    } catch (DateTimeParseException e) {
+                        AlertUtils.erro("Erro", "Data inválida", "Uma das datas é inválida.")
+                                .showAndWait();
+                        return;
+                    }
                 } else {
                     autor.setPeriodoFim(null);
                 }
-                pessoaDAO pessoaDAO = new pessoaDAO();
-                pessoaDAO.addPessoa(autor);
                 autorDAO autorDAO = new autorDAO();
                 autorDAO.addAutor(autor);
                 AlertUtils.info("Successo", "Autor Cadastrado", "Autor cadastrado com sucesso!").showAndWait();
@@ -190,15 +203,14 @@ public class autorController {
                         && !periodoVidaField.getText().isEmpty()) {
                     autor.setNome(nomeAutorField.getText());
                     autor.setNacionalidade(nacionalidadeField.getText());
-                    autor.setPeriodoVida(LocalDate.parse(periodoVidaField.getText(), formatter));
-                    if (!nomeAutorField.getText().matches(".*[^A-Za-zÀ-ÿ ].*")) {
+                    if (!nomeAutorField.getText().matches("[a-zA-Z ]+")) {
                         AlertUtils
                                 .aviso("Erro", "Nome inválido",
                                         "O nome deve conter apenas letras e espaços.")
                                 .showAndWait();
                         return;
                     }
-                    if (!nacionalidadeField.getText().matches(".*[^A-Za-zÀ-ÿ ].*")) {
+                    if (!nacionalidadeField.getText().matches("[a-zA-Z ]+")) {
                         AlertUtils
                                 .aviso("Erro", "Nacionalidade inválida",
                                         "A nacionalidade deve conter apenas letras e espaços.")
@@ -208,18 +220,32 @@ public class autorController {
                     if (!periodoVidaField.getText().matches("\\d{2}-\\d{2}-\\d{4}")) {
                         AlertUtils
                                 .aviso("Erro", "Data inválida",
-                                        "A data deve estar no formato dd-MM-yyyy.")
+                                        "A data de nascimento deve estar no formato dd-MM-yyyy.")
+                                .showAndWait();
+                        return;
+                    }
+                    try {
+                        autor.setPeriodoVida(LocalDate.parse(periodoVidaField.getText(), formatter));
+                    } catch (DateTimeParseException e) {
+                        AlertUtils.erro("Erro", "Data inválida", "Uma das datas é inválida.")
                                 .showAndWait();
                         return;
                     }
                     if (!periodoFimField.getText().trim().isEmpty()) {
-                        autor.setPeriodoFim(LocalDate.parse(periodoFimField.getText(), formatter));
-                    } else if (!periodoFimField.getText().matches("\\d{2}-\\d{2}-\\d{4}")) {
-                        AlertUtils
-                                .aviso("Erro", "Data inválida",
-                                        "A data deve estar no formato dd-MM-yyyy.")
-                                .showAndWait();
-                        return;
+                        if (!periodoFimField.getText().matches("\\d{2}-\\d{2}-\\d{4}")) {
+                            AlertUtils
+                                    .aviso("Erro", "Data inválida",
+                                            "A data de falecimento deve estar no formato dd-MM-yyyy.")
+                                    .showAndWait();
+                            return;
+                        }
+                        try {
+                            autor.setPeriodoFim(LocalDate.parse(periodoFimField.getText(), formatter));
+                        } catch (DateTimeParseException e) {
+                            AlertUtils.erro("Erro", "Data inválida", "Uma das datas é inválida.")
+                                    .showAndWait();
+                            return;
+                        }
                     } else {
                         autor.setPeriodoFim(null);
                     }

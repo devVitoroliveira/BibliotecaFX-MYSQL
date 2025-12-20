@@ -11,6 +11,7 @@ import biblioteca.fx.util.AlertUtils;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -54,6 +55,17 @@ public class clienteController {
         clienteId.setCellValueFactory(new PropertyValueFactory<>("id_pessoa"));
         clienteNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         clienteTelefone.setCellValueFactory(new PropertyValueFactory<>("telefone"));
+        clienteTelefone.setCellFactory(col -> new TableCell<clienteDTO, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.replaceFirst("(\\d{2})(\\d{5})(\\d{4})", "($1) $2-$3"));
+                }
+            }
+        });
         clienteEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         clienteDAO clienteDAO = new clienteDAO();
         clienteDAO.getClientes();

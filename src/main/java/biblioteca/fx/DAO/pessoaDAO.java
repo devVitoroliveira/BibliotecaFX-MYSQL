@@ -5,10 +5,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import biblioteca.fx.DTO.Pessoa;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 
 public class pessoaDAO {
 
@@ -17,25 +17,17 @@ public class pessoaDAO {
     ResultSet rs;
 
     @FXML
-    public int addPessoa(Pessoa p) {
+    public int addPessoa(Pessoa p) throws SQLException {
         String sql = "INSERT INTO pessoa (nomePessoa) VALUES (?)";
-        try {
-            conn = new ConexaoDAO().conexaoBD();
-            pstm = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+        conn = new ConexaoDAO().conexaoBD();
+        pstm = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
-            pstm.setString(1, p.getNome());
-            pstm.execute();
-            ResultSet rs = pstm.getGeneratedKeys();
+        pstm.setString(1, p.getNome());
+        pstm.execute();
+        ResultSet rs = pstm.getGeneratedKeys();
 
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText("Erro ao adicionar pessoa");
-            alert.setContentText("Erro ao adicionar pessoa: " + e.getMessage());
-            alert.showAndWait();
+        if (rs.next()) {
+            return rs.getInt(1);
         }
         return -1;
     }

@@ -20,10 +20,7 @@ public class autorDTO extends Pessoa {
     }
 
     public void setPeriodoFim(LocalDate periodoFim) {
-        if (periodoFim == null || periodoFim.isEqual(null)) {
-            throw new IllegalArgumentException("A data de falecimento não pode ser nula.");
-        }
-        if (periodoFim.isAfter(LocalDate.now())) {
+        if (periodoFim != null && periodoFim.isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("A data de falecimento não pode ser futura.");
         }
         this.periodoFim = periodoFim;
@@ -44,7 +41,7 @@ public class autorDTO extends Pessoa {
     }
 
     public void setPeriodoVida(LocalDate periodoVida) {
-        if (periodoVida == null || periodoVida.isEqual(null)) {
+        if (periodoVida == null) {
             throw new IllegalArgumentException("A data de nascimento não pode ser nula.");
         }
         if (periodoVida.isAfter(LocalDate.now())) {

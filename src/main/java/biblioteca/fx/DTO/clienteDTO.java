@@ -37,6 +37,9 @@ public class clienteDTO extends Pessoa {
         if (email.isEmpty() || email == null) {
             throw new IllegalArgumentException("O email não pode estar vazio");
         }
+        if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            throw new IllegalArgumentException("O email informado é inválido");
+        }
         this.email = email;
     }
 

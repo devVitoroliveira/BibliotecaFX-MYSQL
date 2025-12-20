@@ -1,5 +1,7 @@
 package biblioteca.fx.DTO;
 
+import java.time.LocalDate;
+
 public class emprestimoDTO {
 
     private int id_emprestimo;
@@ -7,15 +9,15 @@ public class emprestimoDTO {
     private int id_livro;
     private String nomeCliente;
     private String nomeLivro;
-    private String data_emprestimo;
-    private String data_devolucao;
+    private LocalDate data_emprestimo;
+    private LocalDate data_devolucao;
 
     public emprestimoDTO() {
     }
 
     public emprestimoDTO(int id_emprestimo, int id_cliente, int id_livro, String nomeCliente, String nomeLivro,
-            String data_emprestimo,
-            String data_devolucao) {
+            LocalDate data_emprestimo,
+            LocalDate data_devolucao) {
         this.id_emprestimo = id_emprestimo;
         this.id_cliente = id_cliente;
         this.id_livro = id_livro;
@@ -49,19 +51,19 @@ public class emprestimoDTO {
         this.id_livro = id_livro;
     }
 
-    public String getData_emprestimo() {
+    public LocalDate getData_emprestimo() {
         return data_emprestimo;
     }
 
-    public void setData_emprestimo(String data_emprestimo) {
+    public void setData_emprestimo(LocalDate data_emprestimo) {
         this.data_emprestimo = data_emprestimo;
     }
 
-    public String getData_devolucao() {
+    public LocalDate getData_devolucao() {
         return data_devolucao;
     }
 
-    public void setData_devolucao(String data_devolucao) {
+    public void setData_devolucao(LocalDate data_devolucao) {
         this.data_devolucao = data_devolucao;
     }
 

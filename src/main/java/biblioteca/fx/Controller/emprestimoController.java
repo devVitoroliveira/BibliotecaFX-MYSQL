@@ -1,8 +1,12 @@
 package biblioteca.fx.Controller;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -55,6 +59,7 @@ public class emprestimoController {
     private TableColumn<emprestimoDTO, String> emprestimoInicio;
     @FXML
     private TableColumn<emprestimoDTO, String> emprestimoFim;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     @FXML
     public void initialize() throws SQLException {
@@ -73,14 +78,16 @@ public class emprestimoController {
         emprestimoTableView.setItems(emprestimoList);
         emprestimoTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
+                LocalDate data = Date.valueOf(newValue.getData_emprestimo()).toLocalDate();
+                LocalDate fim = Date.valueOf(newValue.getData_devolucao()).toLocalDate();
                 int livroIdx = IdLivros.indexOf(newValue.getId_livro());
                 if (livroIdx >= 0 && livroIdx < livroBox.getItems().size()) {
                     livroBox.getSelectionModel().select(livroIdx);
                 } else {
                     livroBox.setValue(null);
                 }
-                inicioField.setText(newValue.getData_emprestimo());
-                fimField.setText(newValue.getData_devolucao());
+                inicioField.setText(data == null ? "" : data.format(formatter));
+                fimField.setText(fim == null ? "" : fim.format(formatter));
                 int idx = Id.indexOf(newValue.getId_cliente());
                 if (idx >= 0 && idx < emprestimoComboBox.getItems().size()) {
                     emprestimoComboBox.getSelectionModel().select(idx);
@@ -150,11 +157,22 @@ public class emprestimoController {
             }
 
             emprestimo.setId_livro(IdLivros.get(livroIdx));
-            emprestimo.setData_emprestimo(inicio);
-            emprestimo.setData_devolucao(fim);
             emprestimo.setId_cliente(Id.get(clienteIdx));
 
             if (!inicio.isEmpty() && !fim.isEmpty()) {
+                if (!inicio.matches("\\d{2}-\\d{2}-\\d{4}") || !fim.matches("\\d{2}-\\d{2}-\\d{4}")) {
+                    AlertUtils.aviso("Erro", "Data inválida", "As datas devem estar no formato dd-MM-yyyy.")
+                            .showAndWait();
+                    return;
+                }
+                try {
+                    emprestimo.setData_emprestimo(LocalDate.parse(inicio, formatter));
+                    emprestimo.setData_devolucao(LocalDate.parse(fim, formatter));
+                } catch (DateTimeParseException e) {
+                    AlertUtils.erro("Erro", "Data inválida", "Uma das datas é inválida.")
+                            .showAndWait();
+                    return;
+                }
                 emprestimoDAO emprestimoDAO = new emprestimoDAO();
                 emprestimoDAO.addEmprestimo(emprestimo);
                 AlertUtils.info("Sucesso", "Empréstimo realizado", "Empréstimo realizado com sucesso!").showAndWait();
@@ -200,14 +218,27 @@ public class emprestimoController {
                 if (livroIdx >= 0) {
                     emp.setId_livro(IdLivros.get(livroIdx));
                 }
-                emp.setData_emprestimo(inicioField.getText());
-                emp.setData_devolucao(fimField.getText());
+
                 if (clienteIdx >= 0) {
                     emp.setId_cliente(Id.get(clienteIdx));
                 }
 
                 if (!inicioField.getText().isEmpty() && !fimField.getText().isEmpty() && livroIdx >= 0
                         && clienteIdx >= 0) {
+                    if (!inicioField.getText().matches("\\d{2}-\\d{2}-\\d{4}")
+                            || !fimField.getText().matches("\\d{2}-\\d{2}-\\d{4}")) {
+                        AlertUtils.aviso("Erro", "Data inválida", "As datas devem estar no formato dd-MM-yyyy.")
+                                .showAndWait();
+                        return;
+                    }
+                    try {
+                        emp.setData_emprestimo(LocalDate.parse(inicioField.getText(), formatter));
+                        emp.setData_devolucao(LocalDate.parse(fimField.getText(), formatter));
+                    } catch (DateTimeParseException e) {
+                        AlertUtils.erro("Erro", "Data inválida", "Uma das datas é inválida.")
+                                .showAndWait();
+                        return;
+                    }
                     emprestimoDAO emprestimoDAO = new emprestimoDAO();
                     emprestimoDAO.updateEmprestimo(emp);
                     AlertUtils.info("Sucesso", "Empréstimo atualizado", "Empréstimo atualizado com sucesso!")

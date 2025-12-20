@@ -40,6 +40,9 @@ public class funcionarioDTO extends Pessoa {
         if (email.isEmpty() || email == null) {
             throw new IllegalArgumentException("O email não pode estar vazio");
         }
+        if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            throw new IllegalArgumentException("O email informado é inválido");
+        }
         this.email = email;
     }
 
@@ -56,8 +59,8 @@ public class funcionarioDTO extends Pessoa {
     }
 
     public void setSalario(double salario) {
-        if (salario <= 0) {
-            throw new IllegalArgumentException("O salário não pode ser menor ou igual a zero");
+        if (salario < 1520.00) {
+            throw new IllegalArgumentException("O salário não pode ser menor ao salário mínimo");
         }
         this.salario = salario;
     }

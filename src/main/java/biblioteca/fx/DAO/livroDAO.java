@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Year;
 import java.util.ArrayList;
 
 import biblioteca.fx.DTO.livroDTO;
@@ -30,16 +31,16 @@ public class livroDAO {
 
     @FXML
     public void addLivro(livroDTO l) throws SQLException {
-        String sql = "insert into livro (idlivro, idAutor, nomeLivro, ano, genero, ibsn) values (?,?,?,?,?,?)";
+        String sql = "insert into livro (idlivro, idAutor, nomeLivro, ano, genero, isbn) values (?,?,?,?,?,?)";
         try {
             conn = new ConexaoDAO().conexaoBD();
             pstm = conn.prepareStatement(sql);
             pstm.setInt(1, l.getIdLivro());
             pstm.setInt(2, l.getIdautor());
             pstm.setString(3, l.getNomeLivro());
-            pstm.setString(4, l.getAno());
+            pstm.setInt(4, l.getAno().getValue());
             pstm.setString(5, l.getGenero());
-            pstm.setString(6, l.getIbsn());
+            pstm.setString(6, l.getIsbn());
             pstm.execute();
             pstm.close();
         } catch (SQLException e) {
@@ -61,9 +62,9 @@ public class livroDAO {
                 livro.setIdautor(rs.getInt("idAutor"));
                 livro.setNomeLivro(rs.getString("nomeLivro"));
                 livro.setNomeAutor(rs.getString("nomePessoa"));
-                livro.setAno(rs.getString("ano"));
+                livro.setAno(Year.of(rs.getInt("ano")));
                 livro.setGenero(rs.getString("genero"));
-                livro.setIbsn(rs.getString("ibsn"));
+                livro.setIsbn(rs.getString("isbn"));
                 livros.add(livro);
             }
         } catch (SQLException e) {
@@ -74,16 +75,16 @@ public class livroDAO {
 
     @FXML
     public void updateLivro(livroDTO l) throws SQLException {
-        String sql = "update livro l join autor a on a.idautor = l.idautor join pessoa p on p.idPessoa = a.idautor set l.idLivro = ?, l.idAutor = ?, l.nomeLivro = ?, l.ano = ?, l.genero = ?, l.ibsn = ? where l.idLivro = ?";
+        String sql = "update livro l join autor a on a.idautor = l.idautor join pessoa p on p.idPessoa = a.idautor set l.idLivro = ?, l.idAutor = ?, l.nomeLivro = ?, l.ano = ?, l.genero = ?, l.isbn = ? where l.idLivro = ?";
         try {
             conn = new ConexaoDAO().conexaoBD();
             pstm = conn.prepareStatement(sql);
             pstm.setInt(1, l.getIdLivro());
             pstm.setInt(2, l.getIdautor());
             pstm.setString(3, l.getNomeLivro());
-            pstm.setString(4, l.getAno());
+            pstm.setInt(4, l.getAno().getValue());
             pstm.setString(5, l.getGenero());
-            pstm.setString(6, l.getIbsn());
+            pstm.setString(6, l.getIsbn());
             pstm.setInt(7, l.getIdLivro());
             pstm.execute();
             pstm.close();

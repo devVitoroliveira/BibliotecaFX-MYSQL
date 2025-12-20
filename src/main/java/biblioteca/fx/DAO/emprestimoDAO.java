@@ -24,8 +24,12 @@ public class emprestimoDAO {
             pstm = conn.prepareStatement(sql);
             pstm.setInt(1, emprestimo.getId_cliente());
             pstm.setInt(2, emprestimo.getId_livro());
-            pstm.setString(3, emprestimo.getData_emprestimo());
-            pstm.setString(4, emprestimo.getData_devolucao());
+            pstm.setDate(3,
+                    emprestimo.getData_emprestimo() != null ? java.sql.Date.valueOf(emprestimo.getData_emprestimo())
+                            : null);
+            pstm.setDate(4,
+                    emprestimo.getData_devolucao() != null ? java.sql.Date.valueOf(emprestimo.getData_devolucao())
+                            : null);
             pstm.execute();
             pstm.close();
         } catch (SQLException e) {
@@ -48,8 +52,10 @@ public class emprestimoDAO {
                 emprestimo.setId_livro(rs.getInt("idLivro"));
                 emprestimo.setNomeCliente(rs.getString("nomePessoa"));
                 emprestimo.setNomeLivro(rs.getString("nomeLivro"));
-                emprestimo.setData_emprestimo(rs.getString("dataInicio"));
-                emprestimo.setData_devolucao(rs.getString("dataFim"));
+                emprestimo.setData_emprestimo(
+                        rs.getString("dataInicio") != null ? rs.getDate("dataInicio").toLocalDate() : null);
+                emprestimo.setData_devolucao(
+                        rs.getString("dataFim") != null ? rs.getDate("dataFim").toLocalDate() : null);
                 emprestimos.add(emprestimo);
             }
             pstm.close();
@@ -67,8 +73,12 @@ public class emprestimoDAO {
             conn = new ConexaoDAO().conexaoBD();
             pstm = conn.prepareStatement(sql);
             pstm.setInt(1, emprestimo.getId_livro());
-            pstm.setString(2, emprestimo.getData_emprestimo());
-            pstm.setString(3, emprestimo.getData_devolucao());
+            pstm.setDate(2,
+                    emprestimo.getData_emprestimo() != null ? java.sql.Date.valueOf(emprestimo.getData_emprestimo())
+                            : null);
+            pstm.setDate(3,
+                    emprestimo.getData_devolucao() != null ? java.sql.Date.valueOf(emprestimo.getData_devolucao())
+                            : null);
             pstm.setInt(4, emprestimo.getId_emprestimo());
             pstm.execute();
             pstm.close();

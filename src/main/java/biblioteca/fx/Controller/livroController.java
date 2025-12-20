@@ -3,6 +3,7 @@ package biblioteca.fx.Controller;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -66,7 +67,7 @@ public class livroController {
         livroGenero.setCellValueFactory(new PropertyValueFactory<>("genero"));
         livroAno.setCellValueFactory(new PropertyValueFactory<>("ano"));
         livroAutor.setCellValueFactory(new PropertyValueFactory<>("nomeAutor"));
-        livroIbsn.setCellValueFactory(new PropertyValueFactory<>("ibsn"));
+        livroIbsn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
         livroDAO l = new livroDAO();
         l.getLivros();
         carregarAutores();
@@ -83,8 +84,8 @@ public class livroController {
                 }
                 livroField.setText(newSelection.getNomeLivro());
                 generoField.setText(newSelection.getGenero());
-                anoField.setText(newSelection.getAno());
-                ibsnField.setText(newSelection.getIbsn());
+                anoField.setText(newSelection.getAno().toString());
+                ibsnField.setText(newSelection.getIsbn());
             }
         });
     }
@@ -111,12 +112,13 @@ public class livroController {
     @FXML
     private void salvarButton() throws SQLException {
         try {
-            String livro, genero, ano, ibsn;
+            String livro, genero, anoStr, ibsn;
             livro = livroField.getText();
             genero = generoField.getText();
-            ano = anoField.getText();
+            anoStr = anoField.getText();
             ibsn = ibsnField.getText();
             int livroIdx = livroComboBox.getSelectionModel().getSelectedIndex();
+            Year ano = Year.of(Integer.parseInt(anoStr));
             livroDTO l = new livroDTO();
             if (livroIdx < 0) {
                 AlertUtils.erro("Erro", "Campos em branco", "Por favor, selecione um autor.").showAndWait();
@@ -125,9 +127,9 @@ public class livroController {
             l.setNomeLivro(livro);
             l.setGenero(genero);
             l.setAno(ano);
-            l.setIbsn(ibsn);
+            l.setIsbn(ibsn);
             l.setIdautor(idAutores.get(livroIdx));
-            if (!livro.isEmpty() && !genero.isEmpty() && !ano.isEmpty() && !ibsn.isEmpty()) {
+            if (!livro.isEmpty() && !genero.isEmpty() && !anoStr.isEmpty() && !ibsn.isEmpty()) {
                 livroDAO ldao = new livroDAO();
                 ldao.addLivro(l);
                 AlertUtils.info("Sucesso", "Livro cadastrado", "Livro cadastrado com sucesso!").showAndWait();
@@ -144,6 +146,9 @@ public class livroController {
         } catch (SQLException e) {
             AlertUtils.erro("Erro", "Erro ao cadastrar livro", "Erro ao cadastrar livro: " + e.getMessage())
                     .showAndWait();
+        } catch (NumberFormatException e) {
+            AlertUtils.erro("Erro", "Ano inválido", "O ano deve conter apenas numeros.").showAndWait();
+            return;
         }
     }
 
@@ -168,12 +173,18 @@ public class livroController {
                 int autorIdx = livroComboBox.getSelectionModel().getSelectedIndex();
 
                 if (autorIdx >= 0) {
-                    l.setIdautor(autorIdx);
+                    l.setIdautor(idAutores.get(autorIdx));
                 }
                 l.setNomeLivro(livroField.getText());
                 l.setGenero(generoField.getText());
-                l.setAno(anoField.getText());
-                l.setIbsn(ibsnField.getText());
+                try {
+                    l.setAno(Year.of(Integer.parseInt(anoField.getText())));
+                } catch (NumberFormatException e) {
+                    AlertUtils.erro("Erro", "Ano inválido", "O ano deve conter apenas numeros.").showAndWait();
+                    return;
+                }
+
+                l.setIsbn(ibsnField.getText());
                 if (!livroField.getText().isEmpty() && !generoField.getText().isEmpty() && !anoField.getText().isEmpty()
                         && !ibsnField.getText().isEmpty()) {
                     livroDAO ldao = new livroDAO();

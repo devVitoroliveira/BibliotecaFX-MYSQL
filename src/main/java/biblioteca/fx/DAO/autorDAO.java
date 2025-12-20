@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import biblioteca.fx.DTO.autorDTO;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 
 public class autorDAO {
 
@@ -73,11 +72,7 @@ public class autorDAO {
             }
             pstm.close();
         } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText("Erro ao buscar autores");
-            alert.setContentText("Erro ao buscar autores: " + e.getMessage());
-            alert.showAndWait();
+            throw e;
         }
         return autores;
     }
@@ -97,11 +92,7 @@ public class autorDAO {
             pstm.executeUpdate();
             pstm.close();
         } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText("Erro ao atualizar autor");
-            alert.setContentText("Erro ao atualizar autor: " + e.getMessage());
-            alert.showAndWait();
+            throw e;
         }
     }
 
